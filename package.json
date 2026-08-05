@@ -1,0 +1,45 @@
+{
+  "name": "cn-llm-bench",
+  "version": "0.1.0",
+  "description": "Compare providers serving China's frontier models — time to first token, throughput, price and success rate, measured side by side.",
+  "bin": {
+    "cnbench": "index.js"
+  },
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "providers.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "list": "node index.js --list"
+  },
+  "keywords": [
+    "llm",
+    "benchmark",
+    "latency",
+    "qwen",
+    "kimi",
+    "deepseek",
+    "glm",
+    "openrouter",
+    "api",
+    "ttft",
+    "throughput",
+    "pricing"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/collinliu/cn-llm-bench.git"
+  },
+  "bugs": {
+    "url": "https://github.com/collinliu/cn-llm-bench/issues"
+  },
+  "homepage": "https://github.com/collinliu/cn-llm-bench#readme"
+}

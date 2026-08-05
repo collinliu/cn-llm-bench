@@ -1,0 +1,137 @@
+{
+  "_comment": "Provider registry. Prices are list prices per 1M tokens, read from each vendor's public pricing page on the date below. Cache-hit and batch discounts are NOT modelled — the cost column reflects an uncached request. Corrections by PR are merged fast.",
+  "_pricesUpdated": "2026-08-05",
+  "_sources": {
+    "official-alibaba": "https://www.alibabacloud.com/help/en/model-studio/models — Qwen3.8 Max listed at $2 / $6 per 1M",
+    "official-moonshot": "Moonshot international API — kimi-k3 listed at $3.00 (input, cache miss) / $15.00 (output) per 1M; $0.30 on cache hit. The domestic CN endpoint (platform.moonshot.cn) is a separate price list in CNY (¥20 / ¥100).",
+    "official-deepseek": "https://api-docs.deepseek.com/ — deepseek-v4-pro $0.435 / $0.87, deepseek-v4-flash $0.14 / $0.28 per 1M (cache miss)",
+    "openrouter": "https://openrouter.ai/models — figures as listed on the model table",
+    "gloritoken": "https://gloritoken.ai — prices updated 2026-08-05 (Kimi K3 cut to $1.73/$8.65; Qwen 3.8 Max $1.04/$3.11)"
+  },
+  "_fx": {
+    "_note": "For providers that publish in a currency other than USD. Set \"currency\" on a model entry and its list price is converted for the cost column at the rate below, with the conversion disclosed in the output. Override at runtime, e.g. FX_CNY_USD=0.1395. No provider currently in this registry needs it — every one below publishes in USD.",
+    "asOf": "2026-08-05",
+    "CNY": 0.14
+  },
+  "providers": {
+    "official-alibaba": {
+      "label": "Alibaba (official)",
+      "baseUrl": "https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
+      "envKey": "DASHSCOPE_API_KEY",
+      "models": {
+        "qwen3.8-max": {
+          "id": "qwen3.8-max",
+          "in": 2.0,
+          "out": 6.0
+        },
+        "qwen3.7-max": {
+          "id": "qwen3.7-max",
+          "in": null,
+          "out": null
+        }
+      }
+    },
+    "official-moonshot": {
+      "label": "Moonshot (official)",
+      "baseUrl": "https://api.moonshot.ai/v1",
+      "envKey": "MOONSHOT_API_KEY",
+      "note": "International endpoint and its USD price list. Cache hits cost $0.30 per 1M input instead of $3.00; this tool always measures an uncached request. Moonshot's domestic CN endpoint is a different endpoint with a different price list (¥20 / ¥100 per 1M) — if that is what you use, change baseUrl and prices accordingly.",
+      "models": {
+        "kimi-k3": {
+          "id": "kimi-k3",
+          "in": 3.0,
+          "out": 15.0
+        }
+      }
+    },
+    "official-deepseek": {
+      "label": "DeepSeek (official)",
+      "baseUrl": "https://api.deepseek.com/v1",
+      "envKey": "DEEPSEEK_API_KEY",
+      "note": "Cache-miss pricing. A cache hit costs $0.003625 per 1M input on v4-pro, which this tool does not exercise.",
+      "models": {
+        "deepseek-v4-pro": {
+          "id": "deepseek-v4-pro",
+          "in": 0.435,
+          "out": 0.87
+        },
+        "deepseek-v4-flash": {
+          "id": "deepseek-v4-flash",
+          "in": 0.14,
+          "out": 0.28
+        }
+      }
+    },
+    "openrouter": {
+      "label": "OpenRouter",
+      "baseUrl": "https://openrouter.ai/api/v1",
+      "envKey": "OPENROUTER_API_KEY",
+      "note": "Routes to third-party hosts; build, quantization and throughput vary by host. Buying credits carries a fee on top of the listed rate, which is not included below.",
+      "models": {
+        "qwen3.8-max": {
+          "id": "qwen/qwen3.8-max",
+          "in": 2.0,
+          "out": 6.0
+        },
+        "qwen3.7-max": {
+          "id": "qwen/qwen3.7-max",
+          "in": 1.475,
+          "out": 4.425
+        },
+        "kimi-k3": {
+          "id": "moonshotai/kimi-k3",
+          "in": 2.9,
+          "out": 14.0
+        },
+        "deepseek-v4-pro": {
+          "id": "deepseek/deepseek-v4-pro",
+          "in": 0.435,
+          "out": 0.87
+        },
+        "deepseek-v4-flash": {
+          "id": "deepseek/deepseek-v4-flash",
+          "in": 0.09,
+          "out": 0.18
+        }
+      }
+    },
+    "gloritoken": {
+      "label": "gloritoken",
+      "baseUrl": "https://api.gloritoken.ai/v1",
+      "envKey": "GLORITOKEN_API_KEY",
+      "note": "Maintainer of this tool. Included as one provider among others; results are printed exactly as measured.",
+      "models": {
+        "qwen3.8-max": {
+          "id": "qwen3.8-max",
+          "in": 1.04,
+          "out": 3.11
+        },
+        "qwen3.7-max": {
+          "id": "qwen3.7-max",
+          "in": 1.1,
+          "out": 3.31
+        },
+        "kimi-k3": {
+          "id": "kimi-k3",
+          "in": 1.73,
+          "out": 8.65
+        },
+        "deepseek-v4-pro": {
+          "id": "deepseek-v4-pro",
+          "in": 0.435,
+          "out": 0.87
+        },
+        "deepseek-v4-flash": {
+          "id": "deepseek-v4-flash",
+          "in": 0.09,
+          "out": 0.18
+        },
+        "glm-5.2": {
+          "id": "glm-5.2",
+          "in": 0.74,
+          "out": 2.57
+        }
+      }
+    }
+  }
+}
