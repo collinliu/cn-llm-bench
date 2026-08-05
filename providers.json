@@ -5,7 +5,7 @@
     "official-alibaba": "https://www.alibabacloud.com/help/en/model-studio/models — Qwen3.8 Max listed at $2 / $6 per 1M",
     "official-moonshot": "Moonshot international API — kimi-k3 listed at $3.00 (input, cache miss) / $15.00 (output) per 1M; $0.30 on cache hit. The domestic CN endpoint (platform.moonshot.cn) is a separate price list in CNY (¥20 / ¥100).",
     "official-deepseek": "https://api-docs.deepseek.com/ — deepseek-v4-pro $0.435 / $0.87, deepseek-v4-flash $0.14 / $0.28 per 1M (cache miss)",
-    "openrouter": "https://openrouter.ai/models — figures as listed on the model table",
+    "openrouter": "https://openrouter.ai/api/v1/models — ids and prices read from the live API on 2026-08-05. Note deepseek-v4-pro is NOT available on OpenRouter, and neither is qwen3.7-max; earlier drafts of this file listed both and were wrong.",
     "gloritoken": "https://gloritoken.ai — prices updated 2026-08-05 (Kimi K3 cut to $1.73/$8.65; Qwen 3.8 Max $1.04/$3.11)"
   },
   "_fx": {
@@ -66,32 +66,32 @@
       "label": "OpenRouter",
       "baseUrl": "https://openrouter.ai/api/v1",
       "envKey": "OPENROUTER_API_KEY",
-      "note": "Routes to third-party hosts; build, quantization and throughput vary by host. Buying credits carries a fee on top of the listed rate, which is not included below.",
+      "note": "Routes to third-party hosts; build, quantization and throughput vary by host. Buying credits carries a fee on top of the listed rate, which is not included below. Every id and price below was read from openrouter.ai/api/v1/models on 2026-08-05, not inferred from naming patterns.",
       "models": {
         "qwen3.8-max": {
           "id": "qwen/qwen3.8-max",
           "in": 2.0,
           "out": 6.0
         },
-        "qwen3.7-max": {
-          "id": "qwen/qwen3.7-max",
-          "in": 1.475,
-          "out": 4.425
-        },
         "kimi-k3": {
           "id": "moonshotai/kimi-k3",
-          "in": 2.9,
-          "out": 14.0
-        },
-        "deepseek-v4-pro": {
-          "id": "deepseek/deepseek-v4-pro",
-          "in": 0.435,
-          "out": 0.87
+          "in": 3.0,
+          "out": 15.0
         },
         "deepseek-v4-flash": {
-          "id": "deepseek/deepseek-v4-flash",
+          "id": "deepseek/deepseek-v4-flash-0731",
           "in": 0.09,
           "out": 0.18
+        },
+        "glm-5.2": {
+          "id": "z-ai/glm-5.2",
+          "in": 0.76,
+          "out": 2.42
+        },
+        "minimax-m3": {
+          "id": "minimax/minimax-m3",
+          "in": 0.3,
+          "out": 1.2
         }
       }
     },
@@ -135,6 +135,11 @@
           "id": "glm-5.2-fast-preview",
           "in": 1.47,
           "out": 5.15
+        },
+        "minimax-m3": {
+          "id": "minimax-m3",
+          "in": 0.39,
+          "out": 1.54
         }
       }
     }
