@@ -1,6 +1,6 @@
 {
   "name": "cn-llm-bench",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Compare providers serving China's frontier models — time to first token, throughput, price and success rate, measured side by side.",
   "bin": {
     "cnbench": "index.js"
