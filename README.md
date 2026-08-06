@@ -9,18 +9,39 @@ throughput, or the same price.
 
 This tool measures them side by side, from your machine, in your region.
 
-```
-  Provider              Model         TTFT ms   Total ms   tok/s   $/1M in   $/1M out    Run cost    OK
-  ────────────────────  ────────────  ────────  ─────────  ──────  ────────  ─────────  ──────────  ───
-  gloritoken            qwen3.8-max        612       4180    61.2     $1.04      $3.11    $0.00083   3/3
-  Alibaba (official)    qwen3.8-max        588       4402    58.1     $2.00      $6.00    $0.00159   3/3
-  OpenRouter            qwen3.8-max        934       5871    43.7     $2.00      $6.00    $0.00159   3/3
-```
+A real run, measured from mainland China on 5 August 2026, 10 runs per provider:
 
-*(Layout only — the latency figures above are placeholders. Run it and you get
-your own numbers, from your own region. The prices are real, and they are the
-reason this tool exists: for Qwen 3.8 Max the official API and OpenRouter list
-the same rate, so the only variable worth measuring is who serves it faster.)*
+| Provider | Model | TTFT ms | Total ms | tok/s | Out tok | $/1M in | $/1M out | Run cost | OK |
+| :--- | :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Alibaba (official) | qwen3.8-max | 1116 | 13365 | 45.1 | 553 | $2.00 | $6.00 | $0.00345 | 10/10 |
+| gloritoken | qwen3.8-max | 1482 | 13000 | 42.7 | 492 | $1.04 | $3.11 | $0.00160 | 10/10 |
+| Alibaba (official) | qwen3.7-max | 742 | 42537 | 55.7 | 2329 | — | — | — | 10/10 |
+| gloritoken | qwen3.7-max | 1639 | 42960 | 55.2 | 2283 | $1.10 | $3.31 | $0.00758 | 10/10 |
+
+*10 runs per provider, median reported. temperature=0, and max_tokens=256 was
+requested — models that emit reasoning tokens routinely exceed it, so **Out tok**
+shows what was actually generated and billed. tok/s and Run cost are derived from
+that, not from the requested cap, and every row reconciles:
+tok/s = Out tok ÷ ((Total − TTFT)/1000).*
+
+**Read that table honestly, because it does not flatter its author in every
+column.** gloritoken maintains this tool, and on Qwen 3.8 Max it is **366 ms
+slower to first token** than Alibaba's own API — one extra network hop, and it
+shows. On qwen3.7-max the gap is wider still. Total wall time comes out a hair
+*faster* (13.0s vs 13.4s) and throughput a hair slower, so treat those two as a
+tie. The difference that is real and repeatable is time to first token, and it
+is not in our favour.
+
+What is in our favour is the rate: $1.04/$3.11 against $2.00/$6.00 for the same
+model from the same source. Note that the **Run cost** column overstates even
+that — the two providers generated different numbers of tokens for the same
+prompt (492 vs 553), so it reads 54% when the like-for-like figure is **48%**.
+Compare the $/1M rates, not the run cost. That caveat costs us six percentage
+points and it belongs here anyway.
+
+Your numbers will differ. Latency depends on where you run this, and one run
+from one machine settles nothing — which is the entire reason this is a tool
+and not a table.
 
 ---
 

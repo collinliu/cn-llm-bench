@@ -290,6 +290,8 @@ async function benchmark(opts) {
 
       const inTok = median(good.map((r) => r.inTokens));
       const outTok = median(good.map((r) => r.outTokens));
+      const medTtft = median(good.map((r) => r.ttft).filter((v) => v != null));
+      const medTotal = median(good.map((r) => r.total));
       const priceIn = toUsd(entry.in, entry.currency);
       const priceOut = toUsd(entry.out, entry.currency);
       const cost =
@@ -304,9 +306,14 @@ async function benchmark(opts) {
         modelId: entry.id,
         runs: opts.runs,
         ok: good.length,
-        ttftMs: median(good.map((r) => r.ttft).filter((v) => v != null)),
-        totalMs: median(good.map((r) => r.total)),
-        tps: median(good.map((r) => r.tps)),
+        ttftMs: medTtft,
+        totalMs: medTotal,
+        // Derived from the medians printed in this same row, NOT a median of
+        // per-run rates. Median-of-ratios does not equal ratio-of-medians, and
+        // a table whose columns don't reconcile is a table nobody can audit.
+        tps: medTtft != null && medTotal != null && outTok != null && medTotal > medTtft
+          ? outTok / ((medTotal - medTtft) / 1000)
+          : null,
         inTokens: inTok,
         outTokens: outTok,
         priceIn: priceIn.usd,
@@ -335,6 +342,7 @@ const COLUMNS = [
   ['TTFT ms', (r) => fmt(r.ttftMs), 'r'],
   ['Total ms', (r) => fmt(r.totalMs), 'r'],
   ['tok/s', (r) => fmt(r.tps, 1), 'r'],
+  ['Out tok', (r) => fmt(r.outTokens), 'r'],
   ['$/1M in', (r) => money(r.priceIn, 2), 'r'],
   ['$/1M out', (r) => money(r.priceOut, 2), 'r'],
   ['Run cost', (r) => (r.runCost == null ? '—' : '$' + r.runCost.toFixed(5)), 'r'],
@@ -369,7 +377,11 @@ function renderMarkdown(rows, opts) {
   ];
   lines.push('');
   lines.push(
-    `_${opts.runs} runs per provider, median reported. max_tokens=${opts.maxTokens}, temperature=0. ` +
+    `_${opts.runs} runs per provider, median reported. temperature=0, and max_tokens=${opts.maxTokens} was requested — ` +
+      `models that emit reasoning tokens routinely exceed it, so **Out tok** shows what was actually generated and billed; ` +
+      `tok/s and Run cost are derived from that, not from the requested cap, and every row reconciles: ` +
+      `tok/s = Out tok ÷ ((Total − TTFT)/1000). ` +
+      `**Providers generate different numbers of tokens for the same prompt, so compare the $/1M rates — Run cost is only what this particular run happened to cost.** ` +
       `Measured with [cn-llm-bench](https://github.com/collinliu/cn-llm-bench) — run it yourself, latency depends on your region._`
   );
   return lines.join('\n');
